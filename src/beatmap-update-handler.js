@@ -100,16 +100,21 @@ async function upsertBeatmap(b, diffcalc = false){
     const osuPath = path.resolve(config.OSU_FILES_PATH, `${b.beatmap_id}.osu`);
 
     if(!(await exists(osuPath)) || diffcalc || await md5(osuPath) != b.file_md5){
+        let attempts = 0;
         do{
             const beatmapFile = await fetch(`https://osu.ppy.sh/osu/${b.beatmap_id}`);
             const buf = await beatmapFile.buffer();
 
-            console.log('md5 compare', await md5(buf), b.file_md5);
+            const _md5 = await md5(buf);
 
-            if(await md5(buf) == b.file_md5){
+            console.log('md5 compare', _md5, b.file_md5, 'attempt', attempts);
+
+            if(_md5 == b.file_md5){
                 await fs.promises.writeFile(osuPath, buf);
                 break;
             }
+
+            attempts++;
 
             await sleep(2500);
         }while(true);
