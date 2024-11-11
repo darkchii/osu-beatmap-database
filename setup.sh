@@ -6,7 +6,7 @@ echo "cloning osu-difficulty-calculator repository"
 mkdir -p ./files
 cd ./files
 echo "cloning osu-difficulty-calculator repository"
-git clone --recurse-submodules https://github.com/ppy/osu-difficulty-calculator
+git clone --recurse-submodules https://github.com/darkchii/osu-difficulty-calculator
 cd ./osu-difficulty-calculator
 git pull
 echo "restoring dotnet modules"

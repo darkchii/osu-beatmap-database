@@ -119,6 +119,17 @@ CREATE TABLE IF NOT EXISTS `osu_difficulty_attribs` (
   PRIMARY KEY (`attrib_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE IF NOT EXISTS `osu_beatmap_scoring_attribs` (
+  `beatmap_id` int(11) unsigned NOT NULL,
+  `mode` tinyint(3) unsigned NOT NULL,
+  `legacy_accuracy_score` int(11) DEFAULT NULL,
+  `legacy_combo_score` BIGINT DEFAULT NULL,
+  `legacy_bonus_score_ratio` float DEFAULT NULL,
+  `legacy_bonus_score` INT(11) DEFAULT NULL,
+  `max_combo` int(11) DEFAULT NULL,
+  PRIMARY KEY (`beatmap_id`,`mode`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 INSERT INTO osu_difficulty_attribs 
   (attrib_id, name, visible)
 VALUES
@@ -129,5 +140,11 @@ VALUES
   (9, 'Max combo', 0),
   (11, 'Strain', 1),
   (13, 'Hit window 300', 0),
-  (15, 'Score multiplier', 0)
-  (17, 'Flashlight rating', 1)
+  (15, 'Score multiplier', 0),
+  (17, 'Flashlight rating', 1),
+  (19, 'Slider Factor', 1),
+  (21, 'Speed Note Count', 1),
+  (23, 'Speed Difficult Strain Count', 1),
+  (25, 'Aim Difficult Strain Count', 1),
+  (27, 'Hit window 100', 0),
+  (29, 'Mono Stamina Factor', 1)
