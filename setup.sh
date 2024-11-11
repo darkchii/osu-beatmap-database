@@ -1,7 +1,7 @@
 #!/bin/sh
-echo "setting up database"
-sudo mysql -u root -e "CREATE DATABASE IF NOT EXISTS osu; CREATE USER IF NOT EXISTS 'osudb'@'localhost'; GRANT ALL PRIVILEGES ON osu.* TO 'osudb'@'localhost';"
-cat tables.sql | mysql -u osudb osu
+# echo "setting up database"
+# sudo mysql -u root -e "CREATE DATABASE IF NOT EXISTS osu; CREATE USER IF NOT EXISTS 'osudb'@'localhost'; GRANT ALL PRIVILEGES ON osu.* TO 'osudb'@'localhost';"
+# cat tables.sql | mysql -u osudb osu
 echo "cloning osu-difficulty-calculator repository"
 mkdir -p ./files
 cd ./files
