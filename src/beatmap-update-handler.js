@@ -118,7 +118,6 @@ async function upsertBeatmap(b, diffcalc = false){
         //run for linux
         let _exec_linux = `export INSERT_BEATMAPS=true && export SKIP_INSERT_ATTRIBUTES=false && export DB_USER=${config.MYSQL.user} && export DB_HOST=${config.MYSQL.host} && export DB_PASS=${config.MYSQL.password} && export DB_NAME=${config.MYSQL.database} && export BEATMAPS_PATH=${config.OSU_FILES_PATH} && dotnet ${config.OSU_DIFFCALC_PATH} beatmaps -ac ${b.beatmap_id}`;
         const __exec = await exec(_exec_linux);
-        console.log(__exec);
         
         const worker = child_process.fork(path.resolve(__dirname, 'beatmap-processor.js'));
 
