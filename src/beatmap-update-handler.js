@@ -171,7 +171,7 @@ async function updateBeatmaps(){
             await upsertBeatmap(beatmap);
 
         if(beatmaps.length == 500)
-            updateBeatmaps();
+            await updateBeatmaps();
     }catch(e){
         console.error(e);
     }
