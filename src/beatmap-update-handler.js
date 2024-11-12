@@ -142,8 +142,10 @@ async function updateBeatmap(beatmap_id, diffcalc = false){
         const response = await fetch(`https://osu.ppy.sh/api/get_beatmaps?k=${config.OSU_API_KEY}&b=${beatmap_id}`);
         const beatmaps = await response.json();
 
-        for(const beatmap of beatmaps)
+        // for(const beatmap of beatmaps)
+        for await(const beatmap of beatmaps){
             await upsertBeatmap(beatmap, diffcalc);
+        }
     }catch(e){
         console.error(e);
 
