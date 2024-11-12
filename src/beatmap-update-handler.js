@@ -180,8 +180,21 @@ async function updateBeatmaps(){
 async function init(){
     await fs.promises.mkdir(config.OSU_FILES_PATH, { recursive: true });
 
-    updateBeatmaps();
-    setInterval(updateBeatmaps, 60 * 1000);
+    // updateBeatmaps();
+    // setInterval(updateBeatmaps, 60 * 1000);
+    //await instead, to avoid the setInterval so they don't start running in parallel
+    await updateBeatmaps();
+
+    //the interval, but await it,
+    while(true){
+        const start = Date.now();
+        await updateBeatmaps();
+        const end = Date.now();
+        const duration = end - start;
+
+        if(duration < 60000)
+            await sleep(60000 - duration);
+    }
 }
 
 init().catch(console.error);
