@@ -119,15 +119,27 @@ CREATE TABLE IF NOT EXISTS `osu_difficulty_attribs` (
   PRIMARY KEY (`attrib_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS `osu_beatmap_scoring_attribs` (
+CREATE TABLE IF NOT EXISTS `osu_beatmap_difficulty_data` (
   `beatmap_id` int(11) unsigned NOT NULL,
   `mode` tinyint(3) unsigned NOT NULL,
-  `legacy_accuracy_score` int(11) DEFAULT NULL,
-  `legacy_combo_score` BIGINT DEFAULT NULL,
-  `legacy_bonus_score_ratio` float DEFAULT NULL,
-  `legacy_bonus_score` INT(11) DEFAULT NULL,
-  `max_combo` int(11) DEFAULT NULL,
-  PRIMARY KEY (`beatmap_id`,`mode`)
+  `mods` int(11) unsigned NOT NULL,
+  `diff_unified` float NOT NULL,
+  `diff_aim` float NOT NULL,
+  `diff_speed` float NOT NULL,
+  `od` float NOT NULL,
+  `ar` float NOT NULL,
+  `max_combo` int(11) NOT NULL,
+  `diff_strain` float NOT NULL,
+  `hit300` float NOT NULL,
+  `score_multiplier` float NOT NULL,
+  `flashlight_rating` float NOT NULL,
+  `slider_factor` float NOT NULL,
+  `speed_note_count` int(11) NOT NULL,
+  `speed_difficult_strain_count` int(11) NOT NULL,
+  `aim_difficult_strain_count` int(11) NOT NULL,
+  `hit100` float NOT NULL,
+  `mono_stamina_factor` float NOT NULL,
+  PRIMARY KEY (`beatmap_id`,`mode`,`mods`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO osu_difficulty_attribs 
@@ -148,3 +160,14 @@ VALUES
   (25, 'Aim Difficult Strain Count', 1),
   (27, 'Hit window 100', 0),
   (29, 'Mono Stamina Factor', 1)
+
+CREATE TABLE IF NOT EXISTS `osu_beatmap_scoring_attribs` (
+  `beatmap_id` int(11) unsigned NOT NULL,
+  `mode` tinyint(3) unsigned NOT NULL,
+  `legacy_accuracy_score` int(11) DEFAULT NULL,
+  `legacy_combo_score` BIGINT DEFAULT NULL,
+  `legacy_bonus_score_ratio` float DEFAULT NULL,
+  `legacy_bonus_score` INT(11) DEFAULT NULL,
+  `max_combo` int(11) DEFAULT NULL,
+  PRIMARY KEY (`beatmap_id`,`mode`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
