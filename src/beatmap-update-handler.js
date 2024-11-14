@@ -124,12 +124,6 @@ async function upsertBeatmap(b, diffcalc = false, index = 0, total = 0) {
             await sleep(2500);
         } while (true);
 
-
-        // let _exec_win = `set INSERT_BEATMAPS=0 && set SKIP_INSERT_ATTRIBUTES=0 && set DB_USER=${config.MYSQL.user} && set DB_HOST=${config.MYSQL.host} && set DB_PASS=${config.MYSQL.password} && set DB_NAME=${config.MYSQL.database} && set BEATMAPS_PATH=${config.OSU_FILES_PATH} && dotnet ${config.OSU_DIFFCALC_PATH} beatmaps -ac ${b.beatmap_id}`;
-        // //run for linux
-        // let _exec_linux = `export INSERT_BEATMAPS=false && export SKIP_INSERT_ATTRIBUTES=false && export DB_USER=${config.MYSQL.user} && export DB_HOST=${config.MYSQL.host} && export DB_PASS=${config.MYSQL.password} && export DB_NAME=${config.MYSQL.database} && export BEATMAPS_PATH=${config.OSU_FILES_PATH} && dotnet ${config.OSU_DIFFCALC_PATH} beatmaps -ac ${b.beatmap_id}`;
-        // const __exec = await exec(_exec_linux);
-
         const worker = child_process.fork(path.resolve(__dirname, 'beatmap-processor.js'));
 
         worker.send({
@@ -138,6 +132,7 @@ async function upsertBeatmap(b, diffcalc = false, index = 0, total = 0) {
         });
     } else {
         // console.log(b.beatmap_id, 'exists');
+        console.log(`(${index}/${total}) ${b.beatmap_id} exists, no need to download`);
     }
 }
 
@@ -166,7 +161,7 @@ async function upsertBeatmaps(beatmaps, diffcalc = false) {
         let _exec_linux = `export ALLOW_DOWNLOAD=${ALLOW_DL ? 'true' : 'false'} && set INSERT_BEATMAPS=false && export SKIP_INSERT_ATTRIBUTES=false && export DB_USER=${config.MYSQL.user} && export DB_HOST=${config.MYSQL.host} && export DB_PASS=${config.MYSQL.password} && export DB_NAME=${config.MYSQL.database} && export BEATMAPS_PATH=${config.OSU_FILES_PATH} && dotnet ${config.OSU_DIFFCALC_PATH} beatmaps -ac -c ${THREADS} ${RUN_DRY ? "-dry" : ""} ${str_ids}`;
 
         console.time('ran diffcalc on ' + ids.length + ' beatmaps');
-        // const __exec = await exec(_exec_linux);
+        const __exec = await exec(_exec_linux);
         console.timeEnd('ran diffcalc on ' + ids.length + ' beatmaps');
     }
     console.log('finished batch of ' + beatmaps.length + ' beatmaps');
