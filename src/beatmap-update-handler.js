@@ -101,6 +101,11 @@ async function upsertBeatmap(b, diffcalc = false, index = 0, total = 0) {
             [...values, ...values]);
     }
 
+    if(b.approved <= 0){
+        console.log(`(${index+1}/${total}) ${b.beatmap_id} has no leaderboard, skipping`);
+        return false;
+    }
+
     const osuPath = path.resolve(config.OSU_FILES_PATH, `${b.beatmap_id}.osu`);
 
     if (!(await exists(osuPath)) || diffcalc || await md5(osuPath) != b.file_md5) {
@@ -134,6 +139,8 @@ async function upsertBeatmap(b, diffcalc = false, index = 0, total = 0) {
         // console.log(b.beatmap_id, 'exists');
         console.log(`(${index+1}/${total}) ${b.beatmap_id} exists, no need to download`);
     }
+
+    return true;
 }
 
 async function upsertBeatmaps(beatmaps, diffcalc = false) {
@@ -142,8 +149,9 @@ async function upsertBeatmaps(beatmaps, diffcalc = false) {
     let index = 0;
     for await (const beatmap of beatmaps) {
         try{
-            await upsertBeatmap(beatmap, diffcalc, index, beatmaps.length);
-            ids.push(beatmap.beatmap_id);
+            const process = await upsertBeatmap(beatmap, diffcalc, index, beatmaps.length);
+            if(process)
+                ids.push(beatmap.beatmap_id);
         }catch(err){
             console.error(err);
         }
