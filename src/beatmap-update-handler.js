@@ -18,7 +18,7 @@ const exec = util.promisify(child_process.exec);
 
 const sleep = delay => new Promise((resolve) => setTimeout(resolve, delay))
 
-const DEBUG_DO_NOT_INSERT = false;
+const DEBUG_DO_NOT_INSERT = true;
 
 const DIFFICULTY_ATTRIBS = {
     1: 'aim',
@@ -201,7 +201,7 @@ async function updateBeatmaps() {
         if (results.length > 0)
             sinceDate = results[0].approved_date.toISOString();
 
-        const response = await fetch(`https://osu.ppy.sh/api/get_beatmaps?k=${config.OSU_API_KEY}&since=${sinceDate}&limit=100`);
+        const response = await fetch(`https://osu.ppy.sh/api/get_beatmaps?k=${config.OSU_API_KEY}&since=${sinceDate}`);
         const beatmaps = await response.json();
 
         await upsertBeatmaps(beatmaps);
