@@ -155,7 +155,7 @@ async function upsertBeatmaps(beatmaps, diffcalc = false) {
 
         const RUN_DRY = false;
         const ALLOW_DL = false;
-        const THREADS = 4;
+        const THREADS = 6;
 
         let _exec_win = `set ALLOW_DOWNLOAD=${ALLOW_DL ? '1' : '0'} && set INSERT_BEATMAPS=0 && set SKIP_INSERT_ATTRIBUTES=0 && set DB_USER=${config.MYSQL.user} && set DB_HOST=${config.MYSQL.host} && set DB_PASS=${config.MYSQL.password} && set DB_NAME=${config.MYSQL.database} && set BEATMAPS_PATH=${config.OSU_FILES_PATH} && dotnet ${config.OSU_DIFFCALC_PATH} beatmaps -ac -c ${THREADS} ${RUN_DRY ? "-dry" : ""} ${str_ids}`;
         let _exec_linux = `export ALLOW_DOWNLOAD=${ALLOW_DL ? 'true' : 'false'} && set INSERT_BEATMAPS=false && export SKIP_INSERT_ATTRIBUTES=false && export DB_USER=${config.MYSQL.user} && export DB_HOST=${config.MYSQL.host} && export DB_PASS=${config.MYSQL.password} && export DB_NAME=${config.MYSQL.database} && export BEATMAPS_PATH=${config.OSU_FILES_PATH} && dotnet ${config.OSU_DIFFCALC_PATH} beatmaps -ac -c ${THREADS} ${RUN_DRY ? "-dry" : ""} ${str_ids}`;
