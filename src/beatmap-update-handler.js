@@ -136,13 +136,9 @@ async function upsertBeatmap(b, diffcalc = false, index = 0, total = 0) {
             beatmap_path: osuPath,
             beatmap_id: b.beatmap_id
         });
-
-        return true;
     } else {
         // console.log(b.beatmap_id, 'exists');
     }
-
-    return false;
 }
 
 async function upsertBeatmaps(beatmaps, diffcalc = false) {
@@ -150,10 +146,13 @@ async function upsertBeatmaps(beatmaps, diffcalc = false) {
     let ids = [];
     let index = 0;
     for await (const beatmap of beatmaps) {
-        const success = await upsertBeatmap(beatmap, diffcalc, index, beatmaps.length);
-        index++;
-        if (success)
+        try{
+            await upsertBeatmap(beatmap, diffcalc, index, beatmaps.length);
             ids.push(beatmap.beatmap_id);
+        }catch(err){
+            console.error(err);
+        }
+        index++;
     }
 
     if (ids.length > 0) {
