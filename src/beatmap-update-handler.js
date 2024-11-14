@@ -218,14 +218,17 @@ async function init() {
     await updateBeatmaps();
 
     // //the interval, but await it,
+    const min_wait = 5; //seconds
     while(true){
         const start = Date.now();
         await updateBeatmaps();
         const end = Date.now();
         const duration = end - start;
 
-        if(duration < 60000)
-            await sleep(60000 - duration); //make sure atleast 1 minute passes before the next update (if we fast as f)
+        // if(duration < 60000)
+        //     await sleep(60000 - duration); //make sure atleast 1 minute passes before the next update (if we fast as f)
+        if(duration < min_wait * 1000)
+            await sleep(min_wait * 1000 - duration); //make sure atleast 5 seconds passes before the next update (if we fast as
     }
 }
 
