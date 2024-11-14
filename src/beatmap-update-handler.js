@@ -112,7 +112,7 @@ async function upsertBeatmap(b, diffcalc = false, index = 0, total = 0) {
             const _md5 = await md5(buf);
 
             // console.log('()id: '+b.beatmap_id+' - md5 compare', _md5, b.file_md5, 'attempt', attempts);
-            console.log(`(${index}/${total}) id: ${b.beatmap_id} - md5 compare`, _md5, b.file_md5, 'attempt', attempts);
+            console.log(`(${index+1}/${total}) id: ${b.beatmap_id} - md5 compare`, _md5, b.file_md5, 'attempt', attempts);
 
             if (_md5 == b.file_md5) {
                 await fs.promises.writeFile(osuPath, buf);
@@ -132,7 +132,7 @@ async function upsertBeatmap(b, diffcalc = false, index = 0, total = 0) {
         });
     } else {
         // console.log(b.beatmap_id, 'exists');
-        console.log(`(${index}/${total}) ${b.beatmap_id} exists, no need to download`);
+        console.log(`(${index+1}/${total}) ${b.beatmap_id} exists, no need to download`);
     }
 }
 
