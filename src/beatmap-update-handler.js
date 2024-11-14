@@ -66,7 +66,7 @@ function md5(path) {
     });
 }
 
-async function upsertBeatmap(b, diffcalc = false) {
+async function upsertBeatmap(b, diffcalc = false, index = 0, total = 0) {
     const values = [b.beatmap_id, b.beatmapset_id, b.approved, b.total_length, b.hit_length,
     b.version, b.artist, b.title, b.creator, b.creator_id, b.mode, b.diff_size,
     b.diff_overall, b.diff_approach, b.diff_drain, b.approved_date, b.last_update,
@@ -111,7 +111,8 @@ async function upsertBeatmap(b, diffcalc = false) {
 
             const _md5 = await md5(buf);
 
-            console.log('md5 compare', _md5, b.file_md5, 'attempt', attempts);
+            // console.log('()id: '+b.beatmap_id+' - md5 compare', _md5, b.file_md5, 'attempt', attempts);
+            console.log(`(${index}/${total}) id: ${b.beatmap_id} - md5 compare`, _md5, b.file_md5, 'attempt', attempts);
 
             if (_md5 == b.file_md5) {
                 await fs.promises.writeFile(osuPath, buf);
@@ -136,8 +137,6 @@ async function upsertBeatmap(b, diffcalc = false) {
             beatmap_id: b.beatmap_id
         });
 
-        console.log(b.beatmap_id, 'downloaded');
-
         return true;
     } else {
         // console.log(b.beatmap_id, 'exists');
@@ -147,9 +146,12 @@ async function upsertBeatmap(b, diffcalc = false) {
 }
 
 async function upsertBeatmaps(beatmaps, diffcalc = false) {
+    console.log('starting batch of ' + beatmaps.length + ' beatmaps');
     let ids = [];
+    let index = 0;
     for await (const beatmap of beatmaps) {
-        const success = await upsertBeatmap(beatmap, diffcalc);
+        const success = await upsertBeatmap(beatmap, diffcalc, index, beatmaps.length);
+        index++;
         if (success)
             ids.push(beatmap.beatmap_id);
     }
@@ -165,9 +167,10 @@ async function upsertBeatmaps(beatmaps, diffcalc = false) {
         let _exec_linux = `export ALLOW_DOWNLOAD=${ALLOW_DL ? 'true' : 'false'} && set INSERT_BEATMAPS=false && export SKIP_INSERT_ATTRIBUTES=false && export DB_USER=${config.MYSQL.user} && export DB_HOST=${config.MYSQL.host} && export DB_PASS=${config.MYSQL.password} && export DB_NAME=${config.MYSQL.database} && export BEATMAPS_PATH=${config.OSU_FILES_PATH} && dotnet ${config.OSU_DIFFCALC_PATH} beatmaps -ac -c ${THREADS} ${RUN_DRY ? "-dry" : ""} ${str_ids}`;
 
         console.time('ran diffcalc on ' + ids.length + ' beatmaps');
-        const __exec = await exec(_exec_linux);
+        // const __exec = await exec(_exec_linux);
         console.timeEnd('ran diffcalc on ' + ids.length + ' beatmaps');
     }
+    console.log('finished batch of ' + beatmaps.length + ' beatmaps');
 }
 
 async function updateBeatmap(beatmap_id, diffcalc = false) {
@@ -198,7 +201,7 @@ async function updateBeatmaps() {
         if (results.length > 0)
             sinceDate = results[0].approved_date.toISOString();
 
-        const response = await fetch(`https://osu.ppy.sh/api/get_beatmaps?k=${config.OSU_API_KEY}&since=${sinceDate}`);
+        const response = await fetch(`https://osu.ppy.sh/api/get_beatmaps?k=${config.OSU_API_KEY}&since=${sinceDate}&limit=100`);
         const beatmaps = await response.json();
 
         await upsertBeatmaps(beatmaps);
