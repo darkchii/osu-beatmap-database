@@ -161,6 +161,7 @@ async function upsertBeatmaps(beatmaps, diffcalc = false) {
         let _exec_linux = `export ALLOW_DOWNLOAD=${ALLOW_DL ? 'true' : 'false'} && set INSERT_BEATMAPS=false && export SKIP_INSERT_ATTRIBUTES=false && export DB_USER=${config.MYSQL.user} && export DB_HOST=${config.MYSQL.host} && export DB_PASS=${config.MYSQL.password} && export DB_NAME=${config.MYSQL.database} && export BEATMAPS_PATH=${config.OSU_FILES_PATH} && dotnet ${config.OSU_DIFFCALC_PATH} beatmaps -ac -c ${THREADS} ${RUN_DRY ? "-dry" : ""} ${str_ids}`;
 
         console.time('ran diffcalc on ' + ids.length + ' beatmaps');
+        console.log('executing diffcalc on ' + ids.length + ' beatmaps');
         const __exec = await exec(_exec_linux);
         console.timeEnd('ran diffcalc on ' + ids.length + ' beatmaps');
     }
