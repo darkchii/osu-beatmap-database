@@ -18,7 +18,7 @@ const exec = util.promisify(child_process.exec);
 
 const sleep = delay => new Promise((resolve) => setTimeout(resolve, delay))
 
-const DEBUG_DO_NOT_INSERT = true;
+const DEBUG_DO_NOT_INSERT = false;
 
 const DIFFICULTY_ATTRIBS = {
     1: 'aim',
