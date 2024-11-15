@@ -208,8 +208,6 @@ async function updateBeatmaps() {
         const beatmaps = await response.json();
 
         await upsertBeatmaps(beatmaps);
-        // for await (const beatmap of beatmaps)
-        //     await upsertBeatmap(beatmap);
 
         if (beatmaps.length == 500)
             await updateBeatmaps();
@@ -227,7 +225,7 @@ async function init() {
     await updateBeatmaps();
 
     // //the interval, but await it,
-    const min_wait = 5; //seconds
+    const min_wait = 60; //seconds
     while(true){
         const start = Date.now();
         await updateBeatmaps();
