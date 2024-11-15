@@ -225,7 +225,8 @@ async function init() {
     await updateBeatmaps();
 
     // //the interval, but await it,
-    const min_wait = 60; //seconds
+    //15 minutes
+    const min_wait = 60 * 15; //15 minutes
     while(true){
         const start = Date.now();
         await updateBeatmaps();
